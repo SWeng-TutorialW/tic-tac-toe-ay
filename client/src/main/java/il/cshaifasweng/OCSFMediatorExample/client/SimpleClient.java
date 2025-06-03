@@ -18,8 +18,8 @@ public class SimpleClient extends AbstractClient {
     protected void handleMessageFromServer(Object msg) {
         if (msg instanceof Warning) {
             EventBus.getDefault().post(new WarningEvent((Warning) msg));
-        } else if (msg instanceof TicTacToeMessage) {
-            // 🔵 NEW: forward TicTacToe messages to GUI
+        }
+        else if (msg instanceof TicTacToeMessage) {
             EventBus.getDefault().post(msg);
         } else {
             System.out.println("Unknown message from server: " + msg.toString());

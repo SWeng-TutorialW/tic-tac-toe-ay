@@ -18,17 +18,25 @@ public class SimpleServer extends AbstractServer {
 	@Override
 	protected void clientConnected(ConnectionToClient client) {
 		waitingPlayers.add(client);
+
 		if (waitingPlayers.size() == 2) {
-			ConnectionToClient p1 = waitingPlayers.get(0), p2 = waitingPlayers.get(1);
-			boolean p1IsX = Math.random() < 0.5;
+			ConnectionToClient p1 = waitingPlayers.get(0);
+			ConnectionToClient p2 = waitingPlayers.get(1);
+
+			// תמיד השחקן הראשון הוא X והשני הוא O
 			try {
-				p1.sendToClient(new TicTacToeMessage("START_GAME", p1IsX ? "X" : "O"));
-				p2.sendToClient(new TicTacToeMessage("START_GAME", p1IsX ? "O" : "X"));
-			} catch (IOException e) { e.printStackTrace(); }
-			activeGames.add(new Game(p1, p2, p1IsX ? p1 : p2));
+				p1.sendToClient(new TicTacToeMessage("START_GAME", "X"));
+				p2.sendToClient(new TicTacToeMessage("START_GAME", "O"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			// מייצרים משחק חדש, כאשר השחקן הראשון (p1) מתחיל כ־X
+			activeGames.add(new Game(p1, p2, p1));
 			waitingPlayers.clear();
 		}
 	}
+
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
